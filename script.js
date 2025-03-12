@@ -64,11 +64,11 @@ async function initQuiz() {
                 
                 // Update button text for the final step
                 if (currentStep === quizData.steps.length - 1) {
-                    this.innerHTML = 'NEXT LESSON <i class="fas fa-arrow-right"></i>';
+                    this.innerHTML = 'إعادة الاختبار <i class="fas fa-arrow-right"></i>';
                 }
             } else {
                 // Quiz completed
-                alert("Quiz completed! In a real app, this would take you to the next lesson.");
+                window.location.reload();
             }
         });
 
