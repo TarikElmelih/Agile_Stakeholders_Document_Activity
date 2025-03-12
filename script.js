@@ -71,6 +71,16 @@ async function initQuiz() {
                 alert("Quiz completed! In a real app, this would take you to the next lesson.");
             }
         });
+
+        fetch('quizData.json')
+            .then(response => response.json())
+            .then(data => {
+                const buttonData = data.steps.find(step => step.id === "intro").content.buttons[0];
+                document.getElementById('project-button').addEventListener('click', function() {
+                    showModal(buttonData.actionData.title, buttonData.actionData.content);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
     } catch (error) {
         console.error('Quiz initialization error:', error);
         document.getElementById('content').innerHTML = `
@@ -185,8 +195,172 @@ function renderCurrentStep() {
         
         downloadBtn.addEventListener('click', function() {
             if (button.action === 'download') {
-                // In a real app, this would trigger a download
-                alert(`Download would start for: ${button.actionData}`);
+                // Create document content with basic HTML and CSS styling
+                const content = `
+                    <!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وثيقة رؤية أصحاب المصلحة</title>
+    <style>
+        /* RTL and Professional Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', 'Tahoma', sans-serif;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            padding: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 15px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .document-meta {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            padding-right: 10px;
+            border-right: 4px solid #3498db;
+        }
+        
+        .section-content {
+            padding: 0 15px;
+        }
+        
+        ul {
+            list-style-position: inside;
+            padding-right: 20px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>وثيقة رؤية أصحاب المصلحة</h1>
+        </header>
+        
+        <div class="section">
+            <div class="section-title">النطاق عالي المستوى:</div>
+            <div class="section-content">${userData.projectScope}</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">خطة الإصدار:</div>
+            <div class="section-content">
+                <ul>
+                    ${userData.releasePlan.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">المستهلكون:</div>
+            <div class="section-content">
+                <ul>
+                    ${userData.consumers.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">طرق جمع التعليقات:</div>
+            <div class="section-content">
+                <ul>
+                    ${userData.feedbackMethods.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">معايير القبول:</div>
+            <div class="section-content">${userData.acceptanceCriteria}</div>
+        </div>
+        
+
+    </div>
+</body>
+</html>
+                `;
+
+                // Create and trigger download
+                const blob = new Blob([content], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = button.actionData;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
             }
         });
         
@@ -322,7 +496,6 @@ function renderSequenceDragAndDrop(container, step) {
     
     // Set up sequence drop zone
     sequenceDropZone.id = step.content.sequenceDropZone.id;
-    const droppedItems = [];
     
     sequenceDropZone.addEventListener('dragover', e => {
         e.preventDefault();
@@ -340,23 +513,30 @@ function renderSequenceDragAndDrop(container, step) {
         const draggedItemId = e.dataTransfer.getData('text/plain');
         const draggedItem = document.getElementById(draggedItemId);
         
-        // Only allow dropping if the item hasn't been dropped already
-        if (!droppedItems.includes(draggedItemId)) {
-            // Create a success item
-            const successItem = document.createElement('div');
-            successItem.className = 'success-item';
-            successItem.textContent = draggedItem.textContent;
-            successItem.setAttribute('data-id', draggedItemId);
-            sequenceDropZone.appendChild(successItem);
-            
-            // Add to dropped items and hide the original
-            droppedItems.push(draggedItemId);
-            draggedItem.style.display = 'none';
-            
-            // Check if all items have been dropped
-            if (droppedItems.length === step.content.dragItems.length) {
-                checkSequence(step, sequenceDropZone, feedbackContainer);
-            }
+        // Allow dropping even if already dropped (for reordering)
+        if (!sequenceDropZone.droppedItems) sequenceDropZone.droppedItems = [];
+        
+        // Remove from dropped items if already exists
+        const existingIndex = sequenceDropZone.droppedItems.indexOf(draggedItemId);
+        if (existingIndex > -1) {
+            sequenceDropZone.droppedItems.splice(existingIndex, 1);
+            document.querySelector(`.success-item[data-id="${draggedItemId}"]`).remove();
+        }
+
+        // Create a success item
+        const successItem = document.createElement('div');
+        successItem.className = 'success-item';
+        successItem.textContent = draggedItem.textContent;
+        successItem.setAttribute('data-id', draggedItemId);
+        sequenceDropZone.appendChild(successItem);
+        
+        // Add to dropped items and hide the original
+        sequenceDropZone.droppedItems.push(draggedItemId);
+        draggedItem.style.display = 'none';
+        
+        // Check if all items have been dropped
+        if (sequenceDropZone.droppedItems.length === step.content.dragItems.length) {
+            checkSequence(step, sequenceDropZone, feedbackContainer);
         }
     });
     
@@ -413,7 +593,7 @@ function resetSequence(step, sequenceDropZone) {
     });
     
     // Reset dropped items
-    droppedItems = [];
+    sequenceDropZone.droppedItems = [];
 }
 
 // Render checkboxes
@@ -605,7 +785,7 @@ function updateNavButtons() {
     
     // Update continue button text on final step
     if (currentStep === quizData.steps.length - 1) {
-        continueButton.innerHTML = 'NEXT LESSON <i class="fas fa-arrow-right"></i>';
+        continueButton.innerHTML = 'اعادة الاختبار <i class="fas fa-arrow-right"></i>';
     } else {
         continueButton.innerHTML = 'التالي <i class="fas fa-arrow-lift"></i>';
     }
@@ -642,6 +822,27 @@ function updateProgressBar() {
     const progressBar = document.getElementById('progress-bar');
     const progressPercentage = (currentStep / (quizData.steps.length - 1)) * 100;
     progressBar.style.width = `${progressPercentage}%`;
+}
+
+function showModal(title, content) {
+    const modal = document.getElementById("myModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalContent = document.getElementById("modalContent");
+
+    modalTitle.textContent = title;
+    modalContent.textContent = content;
+    modal.style.display = "block";
+
+    const span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }
 
 // Initialize quiz when DOM is loaded
