@@ -1,0 +1,365 @@
+:root {
+    --primary-color: #1D1B18;
+    --primary-hover: #2f2c28;
+    --success-color: #BFBA7C;
+    --error-color: #f44336;
+    --bg-color: #F7F3F0;
+    --card-bg: white;
+    --text-color: #1D1B18;
+    --border-color: #BFBA7C;
+    --drag-item-bg: #F7F3F0;
+    --drop-zone-border: #BFBA7C;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--bg-color);
+    line-height: 1.6;
+    direction: rtl;
+}
+
+.quiz-container {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-container {
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+.section {
+    margin-bottom: 25px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.green-header {
+    background-color: var(--success-color);
+    color: white;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 6px 6px 0 0;
+    font-weight: 600;
+}
+
+.content-box {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 0 6px 6px;
+    background-color: #fafafa;
+}
+
+.content-box div {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.content-box div:last-child {
+    border-bottom: none;
+}
+
+/* Drag and Drop styling */
+.drag-items-container {
+    margin-bottom: 20px;
+}
+
+.drag-item {
+    background-color: var(--drag-item-bg);
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: grab;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: background-color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.drag-item:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.drag-item:active {
+    cursor: grabbing;
+}
+
+.drop-zone, .sequence-drop-zone {
+    border: 2px dashed var(--drop-zone-border);
+    min-height: 100px;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    background-color: #fafafa;
+}
+
+.drop-zone.drag-over, .sequence-drop-zone.drag-over {
+    background-color: rgba(42, 119, 131, 0.1);
+    border-color: var(--primary-color);
+}
+
+.success-item {
+    background-color: var(--success-color);
+    color: white;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    animation: dropIn 0.3s ease;
+}
+
+@keyframes dropIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.sequence-drop-zone .success-item {
+    display: flex;
+    align-items: center;
+}
+
+.sequence-drop-zone .success-item:before {
+    content: '\f0c9';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    margin-left: 10px;
+    opacity: 0.7;
+}
+
+/* Feedback messages */
+.error-text {
+    color: var(--error-color);
+    text-align: center;
+    margin: 15px 0;
+    padding: 8px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.success-text {
+    color: var(--success-color);
+    text-align: center;
+    margin: 15px 0;
+    padding: 8px;
+    background-color: rgba(76, 175, 80, 0.1);
+    border-radius: 4px;
+    animation: pulse 1s;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* Navigation buttons */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.nav-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#step-indicator {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Completion page styling */
+.completion-page {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.star {
+    color: gold;
+    font-size: 80px;
+    margin: 20px 0;
+    animation: spin 2s ease-in-out, scale 2s ease-in-out;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg) scale(0); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes scale {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.download-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 24px;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 20px 0;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.download-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
+}
+
+.download-button i {
+    margin-right: 8px;
+}
+
+.small-text {
+    font-size: 14px;
+    max-width: 300px;
+    margin: 0 auto;
+    color: #555;
+}
+
+/* Checkbox and Radio button styling */
+.checkbox-options, .radio-options {
+    padding: 15px;
+    background-color: #fafafa;
+    border: 1px solid var(--border-color);
+    border-radius: 0 0 6px 6px;
+}
+
+.checkbox-item, .radio-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.checkbox-item:hover, .radio-item:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.checkbox-item label, .radio-item label {
+    margin-right: 10px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.submit-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 15px 0;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.submit-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .quiz-container {
+        padding: 20px;
+    }
+    
+    .nav-button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    #step-indicator {
+        font-size: 12px;
+    }
+}
+
+/* Center the image and set its size */
+img {
+    display: block;
+    margin: 0 auto; /* Center the image horizontally */
+    max-width: 100%; /* Ensure the image is responsive */
+    height: 400px; /* Maintain aspect ratio */
+}

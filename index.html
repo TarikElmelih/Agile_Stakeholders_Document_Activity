@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار وثيقة رؤية أصحاب المصلحة</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="quiz-container" id="quiz">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <h1 id="quiz-title">وثيقة رؤية أصحاب المصلحة</h1>
+        <div id="content">
+            <!-- سيتم إدراج المحتوى ديناميكيًا هنا -->
+        </div>
+        
+        <div class="nav-buttons">
+            <button id="back-button" class="nav-button"><i class="fas fa-arrow-right"></i> رجوع</button>
+            <div id="step-indicator">الخطوة <span id="current-step">1</span> من <span id="total-steps">10</span></div>
+            <button id="continue-button" class="nav-button">استمرار <i class="fas fa-arrow-left"></i></button>
+        </div>
+    </div>
+
+    <!-- Templates for different quiz components -->
+    <template id="drag-drop-template">
+        <div class="drag-drop-container">
+            <div class="drag-items-container"></div>
+            <div class="section">
+                <div class="green-header"></div>
+                <div class="drop-zone"></div>
+            </div>
+            <div class="feedback-container"></div>
+        </div>
+    </template>
+
+    <template id="section-template">
+        <div class="section">
+            <div class="green-header"></div>
+            <div class="content-box"></div>
+        </div>
+    </template>
+
+    <template id="checkbox-template">
+        <div class="checkbox-container">
+            <div class="section">
+                <div class="green-header"></div>
+                <div class="checkbox-options"></div>
+            </div>
+            <button class="submit-button">إرسال الإجابة</button>
+            <div class="feedback-container"></div>
+        </div>
+    </template>
+
+    <template id="radio-template">
+        <div class="radio-container">
+            <div class="section">
+                <div class="green-header"></div>
+                <div class="radio-options"></div>
+            </div>
+            <button class="submit-button">إرسال الإجابة</button>
+            <div class="feedback-container"></div>
+        </div>
+    </template>
+
+    <template id="sequence-template">
+        <div class="sequence-container">
+            <div class="drag-items-container"></div>
+            <div class="section">
+                <div class="green-header"></div>
+                <div class="sequence-drop-zone"></div>
+            </div>
+            <div class="feedback-container"></div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>
